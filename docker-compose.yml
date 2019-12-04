@@ -1,0 +1,72 @@
+version: '2'
+
+services:
+  react:
+    build: ./react
+    ports:
+      - "8080:3000"
+    networks:
+      - network-tier
+    depends_on:
+      - server
+    restart: always
+  server:
+    build: ./server
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+    ports:
+      - "7070:7070"
+    networks:
+      - network-tier
+    restart: always
+  service_weather:
+    build: ./service_weather
+    ports:
+      - "7575:7575"
+    depends_on:
+      - server
+      - react
+    networks: 
+      - network-tier
+    restart: always
+  service_youtube:
+    build: ./service_youtube
+    ports:
+      - "7676:7676"
+    depends_on:
+      - server
+      - react
+    networks: 
+      - network-tier
+    restart: always
+  service_cinema:
+    build: ./service_cinema
+    ports:
+      - "7777:7777"
+    depends_on:
+      - server
+      - react
+    networks: 
+      - network-tier
+    restart: always
+  db:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    depends_on:
+      - server
+    restart: always
+    networks:
+      - network-tier
+
+volumes:
+  db-data:
+
+networks:
+  network-tier:
