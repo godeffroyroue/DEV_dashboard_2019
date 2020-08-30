@@ -136,7 +136,7 @@ var smtpTransport = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: "god.justin.dashboard@gmail.com",
-    pass: "dashboardEPITECH"
+    pass: "**********"
   }
 });
 var rand,mailOptions,host,link;
